@@ -1,31 +1,64 @@
-import { test } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 import { faker } from '@faker-js/faker';
+import { OpenAccountPage } from '../../../src/pages/manager/OpenAccountPage'
+import { AddCustomerPage } from '../../../src/pages/manager/AddCustomerPage'
+import { CustomersListPage } from '../../../src/pages/manager/CustomersListPage'
+import { BankManagerMainPage } from '../../../src/pages/manager/BankManagerMainPage'
 
 test.beforeEach(async ({ page }) => {
-  /* 
-  Pre-conditons:
-  1. Open Add Customer page
-  2. Fill the First Name.  
-  3. Fill the Last Name.
-  4. Fill the Postal Code.
-  5. Click [Add Customer].
-  6. Reload the page (This is a simplified step to close the popup).
-  */
-});
+ 
+  const addCustomerPage = new AddCustomerPage(page)
 
-test('Assert manager can add new customer', async ({ page }) => {
-  /* 
-  Test:
-  1. Click [Open Account].
-  2. Select Customer name you just created.
-  3. Select currency.
-  4. Click [Process].
-  5. Reload the page (This is a simplified step to close the popup).
-  6. Click [Customers].
-  7. Assert the customer row has the account number not empty.
+  //Opening page
+  await addCustomerPage.open()
 
-  Tips:
-  1. Do not rely on the customer row id for the step 13. 
-    Use the ".last()" locator to get the last row.
-  */
+  //Generating customer's data
+  const customer = {
+
+  firstName: faker.person.firstName(),
+  lastName: faker.person.lastName(),
+  zipCode: faker.location.zipCode()
+  }
+  //Creating customer
+  await addCustomerPage.createCustomer(customer)
+
+  //Reloading page
+  await page.reload()
+})
+
+test('Assert manager can add new customer', async ({ page }) => { const bankManagerMainPage = new BankManagerMainPage(page)
+
+
+    const openAccountPage = new OpenAccountPage(page)
+    const customersListPage= new CustomersListPage(page)
+
+    //Opening page
+    await customersListPage.open()
+
+    //Creating a client variable
+    const exampleClient = customersListPage.lastRowNameCell
+
+    //Clicking Open account button
+    await bankManagerMainPage.clickOpenAccountButton()
+
+    //Picking previously added customer from dropdown
+    const customerDropdown = openAccountPage.customerDropdown
+    const lastOptionValue = await customerDropdown.locator('option:last-child').getAttribute('value')
+    await customerDropdown.selectOption(lastOptionValue)
+
+    //Picking currency
+    await openAccountPage.pickDollarFromDropdown()
+
+    //Clicking process button
+    await openAccountPage.clickProcessButton()
+
+    //Reloading the page
+    await page.reload()
+
+    //Clicking open
+    await openAccountPage.clickOpenCustomersListButton()
+
+    //Checking if client's bank account number row is not empty
+    await expect(customersListPage.accountNumber).not.toHaveText('')
+
 });
