@@ -43,7 +43,7 @@ test('Assert manager can delete customer', async ({ page }) => {
   await expect(page.getByText(clientName)).toHaveCount(0)
 
   //Realoding the page
-  page.reload()
+  await page.reload()
 
   //Checking if the client is deleted properly
   await expect(page.getByText(clientName)).toHaveCount(0)

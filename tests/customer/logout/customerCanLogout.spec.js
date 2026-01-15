@@ -4,27 +4,29 @@ import { CustomerLoginPage } from '../../../src/pages/customer/CustomerLoginPage
 import { CustomerAccountPage } from '../../../src/pages/customer/CustomerAccountPage';
 
 test('Assert correct customer Logout', async ({ page }) => {
-  /* 
-  Test:
-  1. Open Wizard bank link
-  2. Click [Customer Login]
-  3. Select Neville Longbottom
-  4. Click [Login]
-  5. Click [Logout]
-  6. Wait for the page URL 
-  https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer
-  7. Assert the drop-down is present with empty value 
-  */
   const bankHomePage = new BankHomePage(page);
   const customerLoginPage = new CustomerLoginPage(page);
   const accountPage = new CustomerAccountPage(page);
 
+  //Opening page
   await bankHomePage.open();
+
+  //Clicking customer login button
   await bankHomePage.clickCustomerLoginButton();
+
+  //Picking client
   await customerLoginPage.selectCustomer('Neville Longbottom');
+
+  //Clicking login button
   await customerLoginPage.clickLoginButton();
+
+  //Logging out
   await accountPage.clickLogoutButton();
+
+  //Waiting for URL
   await customerLoginPage.waitForOpened();
+
+  //Checking if dropdown has correct value 
   await customerLoginPage.assertSelectCustomerDropdownIsVisible();
   await customerLoginPage.assertSelectCustomerDropdownContainsValue('');
 });

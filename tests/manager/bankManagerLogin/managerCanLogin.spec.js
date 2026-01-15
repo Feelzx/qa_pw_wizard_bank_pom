@@ -14,7 +14,7 @@ test('Assert manager can Login', async ({ page }) => {
   await bankHomePage.clickBankManagerLoginButton()
 
   //Checking if Add customer button is visible
-  await bankManagerMainPage.assertAddCustomerButtonIsVibible()
+  await bankManagerMainPage.assertAddCustomerButtonIsVisible()
 
   //Checking if open account button is visible
   await bankManagerMainPage.assertOpenAccountButtonIsVisible()

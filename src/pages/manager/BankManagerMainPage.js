@@ -12,7 +12,7 @@ export class BankManagerMainPage {
     await this.page.goto('/angularJs-protractor/BankingProject/#/manager');
   }
 
-  async assertAddCustomerButtonIsVibible() {
+  async assertAddCustomerButtonIsVisible() {
     await expect(this.addCustomerButton).toBeVisible()
   }
 

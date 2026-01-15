@@ -27,5 +27,9 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
     },
+    {
+      name: 'opera',
+      use: { ...devices['Desktop Opera'] }
+    }
   ],
 });
